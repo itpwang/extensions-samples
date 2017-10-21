@@ -54,9 +54,9 @@ app.get('/post-roll', (req, res)=>{
 	rollItemMap[req.query.streamerId] = {
 		enrolled: [],
 		itemName: req.query.itemName,
-		itemImage: req.query.itemImage
+		itemImage: req.query.itemImage,
+		updatedTime: Date.now()
 	};
-
 	setTimeout(()=>{
 		console.log('time out, rolling happens!');
 		let index = Math.floor(Math.random() * rollItemMap[req.query.streamerId].enrolled.length);
@@ -76,6 +76,13 @@ app.get('/post-roll', (req, res)=>{
  */
 app.get('/roll-result', (req, res)=>{
 	res.send(rollItemMap[req.query.streamerId].winner);
+})
+
+/*
+ * @param{string}streamerId (required): the rolling streamer
+ */
+app.get('/last-roll-time', (req, res)=>{
+	res.send(rollItemMap[req.query.streamerId].updatedTime);
 })
 
 const PORT = 8080;
