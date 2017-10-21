@@ -20,36 +20,59 @@ or in the "license" file accompanying this file. This file is distributed on an 
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/common.css">
         <link rel="stylesheet" href="css/viewer.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     </head>
     <body text="white">
         <div class="top-left">
-            <a href="">
-                
-            </a>
-            <input type="image" src="" ng-href=""/>
+            
         </div>
         
         <div id="roll-area">
-            <img src="img/M4A1Poseidon.png"/>
+            <img id="drop-image" src="img/M4A1Poseidon.png" onclick="enterRaffle(this)"/>
             <div id="time-left">00:01:00</div>
 
         </div>
         <script>
-        function enterRaffle(id){
-            
+        function enterRaffle(imgSrc){
+            location.replace("/last-post")
+            // document.getElementById("drop-image").src=
         }
 
-
+        var lock = false;
 
         function startCountDown(time) {
             i = time;
-            var countDown = setInterval(()=>{
-                i--;
-                document.getElementById("time-left").innerHTML = "00:"+"0"+Math.floor(i/60)+":"+i%60;
-                if (i == 0){
-                    clearInterval(countDown);
-                }
+            if (!lock){
+                lock = true;
+                var countDown = setInterval(()=>{
+                    i--;
+                    document.getElementById("time-left").innerHTML = "00:"+"0"+Math.floor(i/60)+":"+i%60;
+                    if (i <= 0){
+                        clearInterval(countDown);
+                        lock = false;
+                    }
+    
+                }, 1000);
+            }
+        }
 
+        window.onload = function(){
+
+            var refresh = setInterval(()=>{
+                $.ajax({
+                    type: 'GET',
+                    url: '/last-post',
+                    data: {
+                        streamerId : "majiaan"
+                    },
+                    success: function(result){
+                        console.log(Date.now() - result.rolledTime);
+                        if (Date.now() - result.rolledTime < 5000 && Date.now() - result.rolledTime >= 0 ) {
+                            console.log("Let's do it");
+                            startCountDown(result.delay);
+                        }
+                    }
+                })
             }, 1000);
         }
         </script>
