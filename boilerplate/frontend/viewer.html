@@ -50,14 +50,25 @@ or in the "license" file accompanying this file. This file is distributed on an 
                     if (i <= 0){
                         clearInterval(countDown);
                         lock = false;
+                        $.ajax({
+                            type: 'GET',
+                            url: '/last-post',
+                            data: {
+                                streamerId : "majiaan"
+                            },
+                            success: function(result){
+                                console.log('winner: ');
+                                console.log(result.winner);
+                            }
+                        })
                     }
     
                 }, 1000);
             }
         }
 
-        window.onload = function(){
 
+        $(document).ready(function(){
             var refresh = setInterval(()=>{
                 $.ajax({
                     type: 'GET',
@@ -74,7 +85,7 @@ or in the "license" file accompanying this file. This file is distributed on an 
                     }
                 })
             }, 1000);
-        }
+        })
         </script>
         <script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
         <script src="js/common.js"></script>
