@@ -21,11 +21,11 @@ app.use((req, res, next) => {
   return next();
 });
 
-app.use(express.static('../frontend'))
+app.use(express.static('boilerplate/frontend'))
 
 let options = {
-   key  : fs.readFileSync('/boilerplate/certs/testing.key'),
-   cert : fs.readFileSync('/boilerplate/certs/testing.crt')
+   key  : fs.readFileSync('boilerplate/certs/testing.key'),
+   cert : fs.readFileSync('boilerplate/certs/testing.crt')
 };
 
 
