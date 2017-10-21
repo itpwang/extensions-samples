@@ -22,21 +22,34 @@ or in the "license" file accompanying this file. This file is distributed on an 
         <link rel="stylesheet" href="css/viewer.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     </head>
-    <body text="white">
-        <div class="top-left">
-            
+    <body >
+        <div id="winner-display">
+            Winner Winner 
         </div>
         
         <div id="roll-area">
             <img id="drop-image" src="img/M4A1Poseidon.png" onclick="enterRaffle(this)"/>
             <div id="time-left">00:01:00</div>
+            <img id="avatar" src="img/twitch.png"/>
+            <img id="sunglass" src="img/sunglass.png"/>
+            <img id="cigar" src="img/cigar2.png"/>
 
         </div>
         <script>
         function enterRaffle(imgSrc){
-            location.replace("/last-post")
-            // document.getElementById("drop-image").src=
+            $.ajax({
+                type: 'GET',
+                url: '/enroll',
+                data: {
+                    streamerId: "majiaan",
+                    viewerTwitchId: "majiaan",
+                    viewerSteamId: "majiaan"
+                },
+                success: function(result){
+                }
+            });
         }
+
 
         var lock = false;
 
@@ -59,6 +72,7 @@ or in the "license" file accompanying this file. This file is distributed on an 
                             success: function(result){
                                 console.log('winner: ');
                                 console.log(result.winner);
+                                displayWinner(result.winner);
                             }
                         })
                     }
@@ -67,6 +81,39 @@ or in the "license" file accompanying this file. This file is distributed on an 
             }
         }
 
+        function displayWinner(winner){
+            document.getElementById("winner-display").innerHTML = "Winner is "+winner.twitchId;
+            $('#avatar').show();
+            $('#time-left').hide();
+            fireworks.push( new Firework( scene ) );
+            fireworks.push( new Firework( scene ) );
+            fireworks.push( new Firework( scene ) );
+            fireworks.push( new Firework( scene ) );
+            fireworks.push( new Firework( scene ) );
+            $('#roll-area').animate({
+                right : (window.innerWidth/2 - 50),
+                bottom : (window.innerHeight/2),
+            }, 5000, function(){
+                fireworks.push( new Firework( scene ) );
+                fireworks.push( new Firework( scene ) );
+                fireworks.push( new Firework( scene ) );
+                fireworks.push( new Firework( scene ) );
+                fireworks.push( new Firework( scene ) );
+                $('#sunglass').fadeIn(1000);
+                $('#cigar').fadeIn(1000);
+                setTimeout(()=>{
+                    $('#sunglass').hide();
+                    $('#cigar').hide();
+                    $('#avatar').hide();
+                    $('#roll-area').hide();
+                    $('#roll-area').css({
+                        right: 30,
+                        bottom: 30
+                    })
+
+                }, 10000);
+            });
+        }
 
         $(document).ready(function(){
             var refresh = setInterval(()=>{
@@ -77,10 +124,11 @@ or in the "license" file accompanying this file. This file is distributed on an 
                         streamerId : "majiaan"
                     },
                     success: function(result){
-                        console.log(Date.now() - result.rolledTime);
                         if (Date.now() - result.rolledTime < 5000 && Date.now() - result.rolledTime >= 0 ) {
                             console.log("Let's do it");
                             startCountDown(result.delay);
+                            $("#roll-area").css({display : "block"});
+
                         }
                     }
                 })
@@ -89,6 +137,7 @@ or in the "license" file accompanying this file. This file is distributed on an 
         </script>
         <script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
         <script src="js/common.js"></script>
+        <script src="js/three.min.js"></script>
         <script src="js/viewer.js"></script>
     </body>
 </html>

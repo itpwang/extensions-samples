@@ -16,6 +16,7 @@ or in the "license" file accompanying this file. This file is distributed on an 
 
 body {
 	font: 12px arial, sans-serif;
+  color: white;
 }
 div {
 	margin: 0px;
@@ -36,14 +37,52 @@ div {
   bottom: 30px;
   cursor: pointer;
   width: 100px;
+  display: none;
+
 }
 
 #roll-area img{
   width: 100px;
 }
 
+#sunglass {
+  position: absolute;
+  display: none;
+  top: -29px;
+  right: -22px;
+  height: 60px;
+  width: 60px;
+}
+
+#cigar {
+  position: absolute;
+  display: none;
+  top: 8px;
+  right: 37px;
+  height: 30px;
+  width: 30px!important;
+}
+
 #time-left {
   width: 100px;
   text-align: center;
   font-size: 20px;
+}
+
+#winner-display {
+  width: 500px;
+  position: absolute;
+  top: 10px;
+  font-size: 26px;
+  left:  calc( 50% - 250px);
+  text-align: center;
+} 
+
+#avatar {
+  position: absolute;
+  right: 0px;
+  top: -30px;
+  height: 60px;
+  width: 60px!important;
+  display: none;
 }
