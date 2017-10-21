@@ -68,7 +68,7 @@ or in the "license" file accompanying this file. This file is distributed on an 
         this.geometry = null;
         this.points   = null;
         this.material = new THREE.PointsMaterial({
-            size: 16,
+            size: 50,
             color: 0xffffff,
             opacity: 1,
             vertexColors: true,

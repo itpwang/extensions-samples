@@ -157,7 +157,9 @@ or in the "license" file accompanying this file. This file is distributed on an 
                         if (Date.now() - result.rolledTime < 5000 && Date.now() - result.rolledTime >= 0 && !lock) {
                             console.log("Let's do it");
                             startCountDown(result.delay);
+                            console.log(result.delay);
                             $("#roll-area").css({display : "block"});
+                            $("#time-left").show();
                             setImage(result.itemImage);
                         }
                     }

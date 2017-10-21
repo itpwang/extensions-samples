@@ -51,6 +51,8 @@ app.get('/enroll', (req, res)=>{
  * @param{int}delay (optional): Delay of roll event
  */
 app.get('/post-roll', (req, res)=>{
+	console.log(req.query)
+	console.log(req.params)
 	rollItemMap[req.query.streamerId] = {
 		enrolled: [],
 		itemName: req.query.itemName,
