@@ -90,7 +90,16 @@ app.get('/last-post', (req, res)=>{
 	res.send(rollItemMap[req.query.streamerId])
 })
 
+/*
+ * @param{url}itemImage: updated url of image
+ */
+app.get('/change-image'), (req, res)=>{
+	res.send(req.query.itemImage);
+}
+
 const PORT = 8080;
 https.createServer(options, app).listen(PORT, function () {
   console.log('Extension Boilerplate service running on https', PORT);
 });
+
+
