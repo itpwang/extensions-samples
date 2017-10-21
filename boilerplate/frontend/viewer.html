@@ -24,11 +24,10 @@ or in the "license" file accompanying this file. This file is distributed on an 
     </head>
     <body >
         <div id="winner-display">
-            Winner Winner 
         </div>
         
         <div id="roll-area">
-            <img id="drop-image" src="img/M4A1Poseidon.png" onclick="enterRaffle(this)"/>
+            <img id="drop-image" src="img/cigar.png" onclick="enterRaffle(this)"/>
             <div id="time-left">00:01:00</div>
             <img id="avatar" src="img/twitch.png"/>
             <img id="sunglass" src="img/sunglass.png"/>
@@ -38,26 +37,50 @@ or in the "license" file accompanying this file. This file is distributed on an 
         <script>
         function enterRaffle(imgSrc){
             $.ajax({
+                url: 'https://api.twitch.tv/helix/users',
                 type: 'GET',
-                url: '/enroll',
-                data: {
-                    streamerId: "majiaan",
-                    viewerTwitchId: "majiaan",
-                    viewerSteamId: "majiaan"
+                beforeSend: function(request) {
+                    request.setRequestHeader("Client-ID", window.twitchAuth.clientId);
                 },
-                success: function(result){
-                }
+                data: {id: window.twitchAuth.userId.substring(1)},
+            })
+            .done(function(result) {
+                console.log(result);
+                viewerDisplayName = result.data[0].display_name;
+                $.ajax({
+                    type: 'GET',
+                    url: '/enroll',
+                    data: {
+                        streamerId: "majiaan",
+                        viewerTwitchId: viewerDisplayName,
+                        viewerSteamId: "majiaan"
+                    },
+                    success: function(result){
+                        $('#drop-image').fadeTo('fast', 0.2, function() {
+                            
+                        });
+                    }
+                });
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
             });
+            
+            
         }
         
-        function sendImage(){
-            document.getElementById("drop-image").src=itemImage;
+        function setImage(src){
+            document.getElementById("drop-image").src = src;
         }
 
         var lock = false;
 
         function startCountDown(time) {
             i = time;
+            document.getElementById("time-left").innerHTML = "00:"+"0"+Math.floor(i/60)+":"+i%60;
             if (!lock){
                 lock = true;
                 var countDown = setInterval(()=>{
@@ -88,6 +111,10 @@ or in the "license" file accompanying this file. This file is distributed on an 
             document.getElementById("winner-display").innerHTML = "Winner is "+winner.twitchId;
             $('#avatar').show();
             $('#time-left').hide();
+            $('#winner-display').fadeIn(1000);
+            $('#drop-image').fadeTo('fast', 1, function() {
+                
+            });
             fireworks.push( new Firework( scene ) );
             fireworks.push( new Firework( scene ) );
             fireworks.push( new Firework( scene ) );
@@ -109,11 +136,11 @@ or in the "license" file accompanying this file. This file is distributed on an 
                     $('#cigar').hide();
                     $('#avatar').hide();
                     $('#roll-area').hide();
+                    $('#winner-display').hide();
                     $('#roll-area').css({
                         right: 30,
                         bottom: 30
                     })
-
                 }, 10000);
             });
         }
@@ -127,11 +154,11 @@ or in the "license" file accompanying this file. This file is distributed on an 
                         streamerId : "majiaan"
                     },
                     success: function(result){
-                        if (Date.now() - result.rolledTime < 5000 && Date.now() - result.rolledTime >= 0 ) {
+                        if (Date.now() - result.rolledTime < 5000 && Date.now() - result.rolledTime >= 0 && !lock) {
                             console.log("Let's do it");
                             startCountDown(result.delay);
                             $("#roll-area").css({display : "block"});
-
+                            setImage(result.itemImage);
                         }
                     }
                 })

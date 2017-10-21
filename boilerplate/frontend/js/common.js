@@ -18,6 +18,7 @@ if(window.Twitch.ext) {
 
   window.Twitch.ext.onAuthorized(function(auth) {
     console.log(auth);
+    window.twitchAuth = auth;
   });
 
   window.Twitch.ext.onContext(function(context, contextFields) {
