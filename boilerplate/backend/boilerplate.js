@@ -28,6 +28,56 @@ let options = {
    cert : fs.readFileSync('/boilerplate/certs/testing.crt')
 };
 
+
+var rollItemMap = {};
+
+/*
+ * @param{string}streamerId:  
+ * @param{res}viewerTwitchId:
+ * @param{res}viewerSteamId:
+ */
+app.get('/enroll', (req, res)=>{
+	rollItemMap[req.query.streamerId].enrolled.push({
+		twitchId : req.query.viewerTwitchId,
+		steamId : req.query.viewerSteamId
+	});
+	res.send(rollItemMap[req.query.streamerId]);
+})
+
+/*
+ * @param{string}streamerId (required): the rolling streamer
+ * @param{string}itemName (required): the item to roll
+ * @param{url}itemImage (required): the image of the item
+ * @param{int}delay (optional): Delay of roll event
+ */
+app.get('/post-roll', (req, res)=>{
+	rollItemMap[req.query.streamerId] = {
+		enrolled: [],
+		itemName: req.query.itemName,
+		itemImage: req.query.itemImage
+	};
+
+	setTimeout(()=>{
+		console.log('time out, rolling happens!');
+		let index = Math.floor(Math.random() * rollItemMap[req.query.streamerId].enrolled.length);
+		console.log('Winner: ' + index);
+		// console.log(rollItemMap[req.query.streamerId].enrolled[index]);
+		let winner = rollItemMap[req.query.streamerId].enrolled[index];
+
+		console.log(winner);
+
+		rollItemMap[req.query.streamerId].winner = winner;
+	}, req.query.delay * 1000);
+	res.send("Hello World");
+})
+
+/*
+ * @param{string}streamerId (required): the rolling streamer
+ */
+app.get('/roll-result', (req, res)=>{
+	res.send(rollItemMap[req.query.streamerId].winner);
+})
+
 const PORT = 8080;
 https.createServer(options, app).listen(PORT, function () {
   console.log('Extension Boilerplate service running on https', PORT);
