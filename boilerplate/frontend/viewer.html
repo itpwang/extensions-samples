@@ -28,10 +28,29 @@ or in the "license" file accompanying this file. This file is distributed on an 
             </a>
             <input type="image" src="" ng-href=""/>
         </div>
-        <p>This is the viewer page!</p>
+        
+        <div id="roll-area">
+            <img src="img/M4A1Poseidon.png"/>
+            <div id="time-left">00:01:00</div>
+
+        </div>
         <script>
         function enterRaffle(id){
             
+        }
+
+
+
+        function startCountDown(time) {
+            i = time;
+            var countDown = setInterval(()=>{
+                i--;
+                document.getElementById("time-left").innerHTML = "00:"+"0"+Math.floor(i/60)+":"+i%60;
+                if (i == 0){
+                    clearInterval(countDown);
+                }
+
+            }, 1000);
         }
         </script>
         <script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
